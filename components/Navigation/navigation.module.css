@@ -1,0 +1,15 @@
+.navigation {
+  padding: 1rem;
+}
+
+.navigation__links {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  row-gap: 1rem;
+  list-style: none;
+}
+
+.navigation__link {
+  padding: 1rem;
+}
