@@ -7,9 +7,7 @@ const ProductsPage = () => {
   return (
     <section>
       <h1>Products</h1>
-      <Link href={`${pathname}/1`}>
-        <button>Product Detail</button>
-      </Link>
+      <Link href={`${pathname}/1`}>Product Detail</Link>
     </section>
   );
 };

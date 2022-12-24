@@ -1,3 +1,5 @@
+import Card from "../components/UI/Card";
+
 const HomePage = () => {
   return (
     <section>

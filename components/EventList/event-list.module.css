@@ -1,0 +1,11 @@
+.event-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+}
+
+.event-item {
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+}

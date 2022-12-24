@@ -16,15 +16,16 @@ const menus = [
     href: "/products",
   },
   {
-    title: "Account",
-    href: "/account",
+    title: "Events",
+    href: "/events",
   },
 ];
 
 const Navigation = () => {
   return (
-    <header>
+    <header className={styles.header}>
       <nav className={styles.navigation}>
+        <h1 className={styles["navigation__heading"]}>NextEvents</h1>
         <ul className={styles["navigation__links"]}>
           {menus.map((menu, index) => (
             <li key={index} className={styles["navigation__link"]}>
