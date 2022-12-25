@@ -1,31 +1,25 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 
-import EventList from "../../components/EventList/EventList";
+import { getAllEvents } from "../../utils/dummy-data";
+import EventList from "../../components/events/event-list";
+import EventsSearch from "../../components/events/events-search";
 
-const EventsPage = () => {
-  const { pathname } = useRouter();
+const AllEventsPage = () => {
+  const { push } = useRouter();
+  const events = getAllEvents();
 
-  console.log(pathname, "/accountId");
+  const findEventsHandler = (year: string, month: string) => {
+    const fullPath = `/events/${year}/${month}`;
 
-  // link alternative <Link href={{
-  //   pathname: 'account/[accountId]',
-  //   query: {
-  //     accountId: 'account1'
-  //   }
-  // }}></Link>
+    push(fullPath);
+  };
 
   return (
-    <section>
-      <h1>Events Page</h1>
-
-      <EventList />
-
-      {/* <Link href={`${pathname}/account1`}>
-        <button>Events Details</button>
-      </Link> */}
-    </section>
+    <>
+      <EventsSearch onSearch={findEventsHandler} />
+      <EventList items={events} />
+    </>
   );
 };
 
-export default EventsPage;
+export default AllEventsPage;

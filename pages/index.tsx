@@ -1,11 +1,14 @@
-import Card from "../components/UI/Card";
+import { getFeaturedEvents } from "../utils/dummy-data";
+import EventList from "../components/events/event-list";
 
-const HomePage = () => {
+function HomePage() {
+  const featuredEvents = getFeaturedEvents();
+
   return (
-    <section>
-      <h1>Home Page</h1>
-    </section>
+    <div>
+      <EventList items={featuredEvents} />
+    </div>
   );
-};
+}
 
 export default HomePage;
