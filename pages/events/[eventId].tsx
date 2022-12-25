@@ -1,16 +1,23 @@
+import { GetStaticProps, GetStaticPaths } from "next";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-import { getEventById } from "../../utils/dummy-data";
+import { getEventById } from "../../utils/events-func";
+import { IEventItems } from "../../utils/interface";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 import ErrorAlert from "../../components/ui/error-alert";
 
-const EventDetailPage = () => {
-  const { query } = useRouter();
+interface IProps {
+  event: IEventItems;
+}
 
-  const eventId = query.eventId;
-  const event = getEventById(eventId as string);
+const EventDetailPage = ({ event }: IProps) => {
+  // const { query } = useRouter();
+
+  // const eventId = query.eventId as string;
+  // const event = getEventById(events, eventId) as IEventItems;
 
   if (!event) {
     return (
@@ -34,6 +41,32 @@ const EventDetailPage = () => {
       </EventContent>
     </>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [
+      { params: { eventId: "e1" } },
+      { params: { eventId: "e2" } },
+      { params: { eventId: "e3" } },
+    ],
+    fallback: false, // can also be true or 'blocking'
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { params } = context;
+
+  const eventId = params?.eventId as string;
+
+  const response = await axios.get(`http://localhost:8000/events/${eventId}`);
+  const data = await response.data;
+
+  return {
+    props: {
+      events: data,
+    },
+  };
 };
 
 export default EventDetailPage;

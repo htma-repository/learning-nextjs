@@ -1,6 +1,6 @@
 import EventItem from "./event-item";
 
-import { IEventItems } from "../../utils/dummy-data";
+import { IEventItems } from "../../utils/interface";
 
 import classes from "./event-list.module.css";
 

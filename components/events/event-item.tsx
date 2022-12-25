@@ -4,7 +4,7 @@ import Button from "../ui/button";
 import DateIcon from "../icons/date-icon";
 import AddressIcon from "../icons/address-icon";
 import ArrowRightIcon from "../icons/arrow-right-icon";
-import { IEventItems } from "../../utils/dummy-data";
+import { IEventItems } from "../../utils/interface";
 import classes from "./event-item.module.css";
 
 type IProps = IEventItems;

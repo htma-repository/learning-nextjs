@@ -1,12 +1,17 @@
+import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-import { getAllEvents } from "../../utils/dummy-data";
+import { IEventItems } from "../../utils/interface";
 import EventList from "../../components/events/event-list";
 import EventsSearch from "../../components/events/events-search";
 
-const AllEventsPage = () => {
+interface IProps {
+  events: IEventItems[];
+}
+
+const AllEventsPage = ({ events }: IProps) => {
   const { push } = useRouter();
-  const events = getAllEvents();
 
   const findEventsHandler = (year: string, month: string) => {
     const fullPath = `/events/${year}/${month}`;
@@ -20,6 +25,17 @@ const AllEventsPage = () => {
       <EventList items={events} />
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const response = await axios.get("http://localhost:8000/events");
+  const data: IEventItems[] = await response.data;
+
+  return {
+    props: {
+      events: data,
+    },
+  };
 };
 
 export default AllEventsPage;

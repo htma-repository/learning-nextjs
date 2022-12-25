@@ -1,16 +1,22 @@
+import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-import { getFilteredEvents } from "../../utils/dummy-data";
+import { getFilteredEvents } from "../../utils/events-func";
+import { IEventItems } from "../../utils/interface";
 import EventList from "../../components/events/event-list";
 import ResultsTitle from "../../components/events/results-title";
 import Button from "../../components/ui/button";
 import ErrorAlert from "../../components/ui/error-alert";
 
-const FilteredEventsPage = () => {
+interface IProps {
+  events: IEventItems[];
+}
+
+const FilteredEventsPage = ({ events }: IProps) => {
   const { query } = useRouter();
 
-  const filterData = query.slug;
-  console.log(filterData);
+  const filterData = query.slug as string[];
 
   if (!filterData) {
     return <p className="center">Loading...</p>;
@@ -42,7 +48,7 @@ const FilteredEventsPage = () => {
     );
   }
 
-  const filteredEvents = getFilteredEvents(numYear, numMonth);
+  const filteredEvents = getFilteredEvents(events, numYear, numMonth);
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
@@ -65,6 +71,28 @@ const FilteredEventsPage = () => {
       <EventList items={filteredEvents} />
     </>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [
+      { params: { slug: ["2021", "5"] } },
+      { params: { slug: ["2021", "5"] } },
+      { params: { slug: ["2021", "5"] } },
+    ],
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const response = await axios.get("http://localhost:8000/events");
+  const data: IEventItems[] = await response.data;
+
+  return {
+    props: {
+      events: data,
+    },
+  };
 };
 
 export default FilteredEventsPage;
