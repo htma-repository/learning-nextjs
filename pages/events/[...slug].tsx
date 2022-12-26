@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { getFilteredEvents } from "../../utils/events-func";
 import { IEventItems } from "../../utils/interface";
+import { getEvent } from "./[eventId]";
 import EventList from "../../components/events/event-list";
 import ResultsTitle from "../../components/events/results-title";
 import Button from "../../components/ui/button";
@@ -74,13 +75,18 @@ const FilteredEventsPage = ({ events }: IProps) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const data = await getEvent();
+
+  const slug = data.map((data) => data.date);
+  const year = slug.map((year) => new Date(year).getFullYear());
+  const month = slug.map((month) => new Date(month).getMonth());
+
   return {
     paths: [
-      { params: { slug: ["2021", "5"] } },
-      { params: { slug: ["2021", "5"] } },
-      { params: { slug: ["2021", "5"] } },
+      // { params: { slug: ["2021", "5"] } },
+      // { params: { slug: ["2022", "4"] } },
     ],
-    fallback: false,
+    fallback: true,
   };
 };
 

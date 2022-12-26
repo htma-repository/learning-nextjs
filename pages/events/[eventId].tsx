@@ -19,6 +19,8 @@ const EventDetailPage = ({ event }: IProps) => {
   // const eventId = query.eventId as string;
   // const event = getEventById(events, eventId) as IEventItems;
 
+  console.log(event);
+
   if (!event) {
     return (
       <ErrorAlert>
@@ -43,13 +45,35 @@ const EventDetailPage = ({ event }: IProps) => {
   );
 };
 
+export const getEvent = async (eventId?: string) => {
+  const response = await axios.get(
+    `${
+      eventId
+        ? `http://localhost:8000/events/${eventId}`
+        : "http://localhost:8000/events/"
+    }`
+  );
+  const data: IEventItems[] = await response.data;
+  return data;
+};
+
 export const getStaticPaths: GetStaticPaths = async () => {
+  const events = await getEvent();
+
+  const id = events.map((event) => event.id);
+
+  const params = id.map((id) => ({
+    params: { eventId: id },
+  }));
+
   return {
-    paths: [
-      { params: { eventId: "e1" } },
-      { params: { eventId: "e2" } },
-      { params: { eventId: "e3" } },
-    ],
+    paths: params,
+    /* 
+      fallback can be true, false or 'blocking', 
+      true = nextjs CAN view page by params without params list on paths but need checking in component function, because page need time to generated.
+      false = nextjs CANNOT view page by params without list on paths,
+      'blocking' = nextjs CAN view page by params without params list on paths, NO need checking in component function, because nextjs will wait until page ready from generated.
+    */
     fallback: false, // can also be true or 'blocking'
   };
 };
@@ -59,12 +83,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const eventId = params?.eventId as string;
 
-  const response = await axios.get(`http://localhost:8000/events/${eventId}`);
-  const data = await response.data;
+  const data = await getEvent(eventId);
 
   return {
     props: {
-      events: data,
+      event: data,
     },
   };
 };

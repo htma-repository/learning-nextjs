@@ -6,6 +6,9 @@
   padding: 1rem 10%;
   height: 5rem;
   background-color: #202020;
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 
 .logo {
