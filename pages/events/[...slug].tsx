@@ -1,10 +1,8 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import axios from "axios";
 
-import { getFilteredEvents } from "../../utils/events-func";
+import { getAllEvents, getFilteredEvents } from "../../utils/events-func";
 import { IEventItems } from "../../utils/interface";
-import { getEvent } from "./[eventId]";
 import EventList from "../../components/events/event-list";
 import ResultsTitle from "../../components/events/results-title";
 import Button from "../../components/ui/button";
@@ -51,6 +49,8 @@ const FilteredEventsPage = ({ events }: IProps) => {
 
   const filteredEvents = getFilteredEvents(events, numYear, numMonth);
 
+  console.log(filteredEvents);
+
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <>
@@ -74,25 +74,58 @@ const FilteredEventsPage = ({ events }: IProps) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const data = await getEvent();
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const data = await getEvent();
 
-  const slug = data.map((data) => data.date);
-  const year = slug.map((year) => new Date(year).getFullYear());
-  const month = slug.map((month) => new Date(month).getMonth());
+//   const slug = data.map((data) => data.date);
+//   const years = slug.map((year) => new Date(year).getFullYear().toString());
+//   const months = slug.map((month) =>
+//     (new Date(month).getMonth() + 1).toString()
+//   );
 
-  return {
-    paths: [
-      // { params: { slug: ["2021", "5"] } },
-      // { params: { slug: ["2022", "4"] } },
-    ],
-    fallback: true,
-  };
-};
+//   const result: string[][] = [];
+//   years.forEach((year, index) => {
+//     result.push([year, months[index]]);
+//   });
 
-export const getStaticProps: GetStaticProps = async () => {
-  const response = await axios.get("http://localhost:8000/events");
-  const data: IEventItems[] = await response.data;
+//   const params = result.map((param) => {
+//     return { params: { slug: param } };
+//   });
+
+//   return {
+//     paths: params,
+//     fallback: true,
+//   };
+// };
+
+// export const getStaticProps: GetStaticProps = async () => {
+//   const response = await axios.get("http://localhost:8000/events");
+//   const data: IEventItems[] = await response.data;
+
+//   if (!data || data.length === 0) {
+//     return { notFound: true };
+//   }
+
+//   return {
+//     props: {
+//       events: data,
+//     },
+//   };
+// };
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // const { params } = context;
+
+  // console.log(params?.slug);
+
+  // const response = await axios.get("http://localhost:8000/events");
+  // const data: IEventItems[] = await response.data;
+
+  const data = await getAllEvents();
+
+  if (!data || data.length === 0) {
+    return { notFound: true };
+  }
 
   return {
     props: {

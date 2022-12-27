@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import axios from "axios";
+
 // import fs from "fs/promises";
 // import path from "path";
 
@@ -12,24 +14,41 @@ interface IProps {
 }
 
 function HomePage({ events }: IProps) {
-  const featuredEvents = getFeaturedEvents(events);
+  const [eventsData, setEventsData] = useState<IEventItems[]>(events);
+  // const featuredEvents = getFeaturedEvents(eventsData);
+
+  // Client site data fetching
+  useEffect(() => {
+    const getEvents = async () => {
+      const response = await axios.get("http://localhost:8000/events");
+      const data: IEventItems[] = await response.data;
+
+      setEventsData(data);
+    };
+
+    getEvents();
+  }, []);
 
   return (
     <div>
-      <EventList items={featuredEvents} />
+      <EventList items={eventsData} />
     </div>
   );
 }
 
+// Pre-rendering data fetching
 export const getStaticProps: GetStaticProps = async () => {
-  /* read db.json file with fs & path library who can only used in server side code */
+  /* read db.json file with fs & path library, can only used in server side code */
+
   // const filePath = path.join(process.cwd(), "events-db.json");
   // const eventsData = await fs.readFile(filePath);
   // const newData = JSON.parse(eventsData.toString());
   // console.log(newData.events);
 
-  const response = await axios.get("http://localhost:8000/events");
-  const data: IEventItems[] = await response.data;
+  // const response = await axios.get("http://localhost:8000/events");
+  // const data: IEventItems[] = await response.data;
+
+  const data = await getFeaturedEvents();
 
   if (!data) {
     return {
@@ -49,17 +68,17 @@ export const getStaticProps: GetStaticProps = async () => {
       events: data,
     },
     /* 
-      revalidate data every 10 second (ISR) Incremental Static Re-generation
+      revalidate data every 10 second (ISR) Incremental Static Re-generation, ONLY can use on getStaticProps
     */
     // revalidate: 10,
 
     /* 
-      view not found page instead data from server
+      view not found page instead data from server, good to use if data not found on server
     */
     // notFound: true,
 
     /*
-      redirect page after fetching data, good to use if the data failed to get from server & want to other page automatically
+      redirect page after fetching data, good to use if the data failed to get from server & want to open other page automatically
      */
     // redirect: {
     //   destination: "/events",

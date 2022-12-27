@@ -13,6 +13,9 @@ const MainHeader = () => {
           <li>
             <Link href="/events">Browse All Events</Link>
           </li>
+          <li>
+            <Link href="/new-events">New Events</Link>
+          </li>
         </ul>
       </nav>
     </header>

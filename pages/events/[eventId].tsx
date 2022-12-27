@@ -1,8 +1,8 @@
 import { GetStaticProps, GetStaticPaths } from "next";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import axios from "axios";
 
-import { getEventById } from "../../utils/events-func";
+// import { getEventById } from "../../utils/events-func";
 import { IEventItems } from "../../utils/interface";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
@@ -57,6 +57,10 @@ export const getEvent = async (eventId?: string) => {
   return data;
 };
 
+/* 
+  getStaticPaths needed on getStaticProps, but ONLY in dynamic params path, don't always needed both if not used dynamic params 
+*/
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const events = await getEvent();
 
@@ -70,8 +74,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: params,
     /* 
       fallback can be true, false or 'blocking', 
-      true = nextjs CAN view page by params without params list on paths but need checking in component function, because page need time to generated.
-      false = nextjs CANNOT view page by params without list on paths,
+      true = nextjs CAN view page by params without params list on paths but need checking in component function, because page need time to generated or it will error.
+      false = nextjs CANNOT view page by params without list on paths. can ONLY view page on paths params list.
       'blocking' = nextjs CAN view page by params without params list on paths, NO need checking in component function, because nextjs will wait until page ready from generated.
     */
     fallback: false, // can also be true or 'blocking'
