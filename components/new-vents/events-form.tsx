@@ -17,15 +17,15 @@ const EventsForm = () => {
     event.preventDefault();
 
     const title = titleRef.current?.value;
-    const desc = descRef.current?.value;
+    const description = descRef.current?.value;
     const location = locationRef.current?.value;
     const date = dateRef.current?.value;
 
-    console.log({ title, desc, location, date });
+    // console.log({ title, description, location, date });
 
     const newEvents = {
       title,
-      desc,
+      description,
       location,
       date,
       image: "images/coding-event.jpg",
@@ -33,7 +33,7 @@ const EventsForm = () => {
     };
 
     const response = await axios.post(
-      "http://localhost:8000/events",
+      "http://localhost:3000/api/events",
       newEvents
     );
 

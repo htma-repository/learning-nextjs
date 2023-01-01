@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 import { IEventItems } from "../../utils/interface";
+import { getAllEvents } from "../../utils/events-func";
 import EventList from "../../components/events/event-list";
 import EventsSearch from "../../components/events/events-search";
 
@@ -28,13 +29,13 @@ const AllEventsPage = ({ events }: IProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const response = await axios.get("http://localhost:8000/events");
-  const data: IEventItems[] = await response.data;
+  const allEvents = await getAllEvents();
 
   return {
     props: {
-      events: data,
+      events: allEvents,
     },
+    revalidate: 300,
   };
 };
 

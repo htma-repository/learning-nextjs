@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import axios from "axios";
-
 // import fs from "fs/promises";
 // import path from "path";
 
 import { getFeaturedEvents } from "../utils/events-func";
 import { IEventItems } from "../utils/interface";
 import EventList from "../components/events/event-list";
+import MetaHead from "../components/ui/meta-head";
 
 interface IProps {
   events: IEventItems[];
@@ -31,6 +31,7 @@ function HomePage({ events }: IProps) {
 
   return (
     <div>
+      <MetaHead title="Events" desc="List All Events you can visit" />
       <EventList items={eventsData} />
     </div>
   );
@@ -45,12 +46,15 @@ export const getStaticProps: GetStaticProps = async () => {
   // const newData = JSON.parse(eventsData.toString());
   // console.log(newData.events);
 
+  /* 
+    fetch data with axios
+  */
   // const response = await axios.get("http://localhost:8000/events");
   // const data: IEventItems[] = await response.data;
 
-  const data = await getFeaturedEvents();
+  const featuredEvents = await getFeaturedEvents();
 
-  if (!data) {
+  if (!featuredEvents) {
     return {
       props: {},
       redirect: {
@@ -59,14 +63,15 @@ export const getStaticProps: GetStaticProps = async () => {
     };
   }
 
-  if (data.length < 1) {
+  if (featuredEvents.length < 1) {
     return { props: {}, notFound: true };
   }
 
   return {
     props: {
-      events: data,
+      events: featuredEvents,
     },
+    revalidate: 600,
     /* 
       revalidate data every 10 second (ISR) Incremental Static Re-generation, ONLY can use on getStaticProps
     */

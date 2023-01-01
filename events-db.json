@@ -71,6 +71,24 @@
       "image": "images/coding-event.jpg",
       "isFeatured": true,
       "id": "NP-rbuT"
+    },
+    {
+      "title": "Investor Quality Producer",
+      "desc": "Sit est dignissimos cum et ratione eos sunt.",
+      "location": "Repudiandae libero voluptatem molestiae velit et.",
+      "date": "2022-10-08",
+      "image": "images/coding-event.jpg",
+      "isFeatured": true,
+      "id": "msOI0_t"
+    },
+    {
+      "title": "Dynamic Assurance Executive",
+      "desc": "Ducimus accusantium corrupti id inventore eum at quam.",
+      "location": "Excepturi sed vitae mollitia asperiores.",
+      "date": "2022-01-30",
+      "image": "images/coding-event.jpg",
+      "isFeatured": true,
+      "id": "7fiz3uV"
     }
   ]
 }

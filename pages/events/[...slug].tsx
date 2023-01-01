@@ -10,31 +10,32 @@ import ErrorAlert from "../../components/ui/error-alert";
 
 interface IProps {
   events: IEventItems[];
+  numYear: number;
+  numMonth: number;
+  hasError: boolean;
 }
 
-const FilteredEventsPage = ({ events }: IProps) => {
+const FilteredEventsPage = ({
+  events,
+  numYear,
+  numMonth,
+  hasError,
+}: IProps) => {
   const { query } = useRouter();
 
-  const filterData = query.slug as string[];
+  // const filterData = query.slug as string[];
 
-  if (!filterData) {
-    return <p className="center">Loading...</p>;
-  }
+  // const filteredYear = filterData[0];
+  // const filteredMonth = filterData[1];
 
-  const filteredYear = filterData[0];
-  const filteredMonth = filterData[1];
+  // const numYear = +filteredYear;
+  // const numMonth = +filteredMonth;
 
-  const numYear = +filteredYear;
-  const numMonth = +filteredMonth;
+  // if (!filterData) {
+  //   return <p className="center">Loading...</p>;
+  // }
 
-  if (
-    isNaN(numYear) ||
-    isNaN(numMonth) ||
-    numYear > 2030 ||
-    numYear < 2021 ||
-    numMonth < 1 ||
-    numMonth > 12
-  ) {
+  if (hasError) {
     return (
       <>
         <ErrorAlert>
@@ -47,11 +48,7 @@ const FilteredEventsPage = ({ events }: IProps) => {
     );
   }
 
-  const filteredEvents = getFilteredEvents(events, numYear, numMonth);
-
-  console.log(filteredEvents);
-
-  if (!filteredEvents || filteredEvents.length === 0) {
+  if (!events || events.length === 0) {
     return (
       <>
         <ErrorAlert>
@@ -69,7 +66,7 @@ const FilteredEventsPage = ({ events }: IProps) => {
   return (
     <>
       <ResultsTitle date={date} />
-      <EventList items={filteredEvents} />
+      <EventList items={events} />
     </>
   );
 };
@@ -121,7 +118,33 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // const response = await axios.get("http://localhost:8000/events");
   // const data: IEventItems[] = await response.data;
 
-  const data = await getAllEvents();
+  const { params } = context;
+
+  const filterData = params?.slug as string[];
+
+  const filteredYear = filterData[0];
+  const filteredMonth = filterData[1];
+
+  const numYear = +filteredYear;
+  const numMonth = +filteredMonth;
+
+  if (
+    isNaN(numYear) ||
+    isNaN(numMonth) ||
+    numYear > 2030 ||
+    numYear < 2021 ||
+    numMonth < 1 ||
+    numMonth > 12
+  ) {
+    return {
+      props: {
+        hasError: true,
+      },
+      // notFound: true,
+    };
+  }
+
+  const data = await getFilteredEvents(numYear, numMonth);
 
   if (!data || data.length === 0) {
     return { notFound: true };
@@ -130,6 +153,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       events: data,
+      numYear,
+      numMonth,
     },
   };
 };
