@@ -1,8 +1,8 @@
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 
-import { getAllEvents, getFilteredEvents } from "../../utils/events-func";
-import { IEventItems } from "../../utils/interface";
+import { getFilteredEvents } from "../../utils/events-func";
+import { IEventItems } from "../../utils/type";
 import EventList from "../../components/events/event-list";
 import ResultsTitle from "../../components/events/results-title";
 import Button from "../../components/ui/button";
@@ -112,8 +112,6 @@ const FilteredEventsPage = ({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // const { params } = context;
-
-  // console.log(params?.slug);
 
   // const response = await axios.get("http://localhost:8000/events");
   // const data: IEventItems[] = await response.data;

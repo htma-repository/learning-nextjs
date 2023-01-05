@@ -1,38 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { GetStaticProps } from "next";
 import axios from "axios";
-// import fs from "fs/promises";
-// import path from "path";
 
-import { getFeaturedEvents } from "../utils/events-func";
-import { IEventItems } from "../utils/interface";
+import { IEventItems } from "../utils/type";
 import EventList from "../components/events/event-list";
 import MetaHead from "../components/ui/meta-head";
+// import { getFilePath, getJsonData } from "../utils/db-json";
+import NewsletterRegistration from "../components/input/newsletter-registration";
+import { getFeaturedEvents } from "../utils/events-func";
 
 interface IProps {
   events: IEventItems[];
 }
 
 function HomePage({ events }: IProps) {
-  const [eventsData, setEventsData] = useState<IEventItems[]>(events);
+  // const [eventsData, setEventsData] = useState<IEventItems[]>(events);
   // const featuredEvents = getFeaturedEvents(eventsData);
 
   // Client site data fetching
-  useEffect(() => {
-    const getEvents = async () => {
-      const response = await axios.get("http://localhost:8000/events");
-      const data: IEventItems[] = await response.data;
+  // useEffect(() => {
+  //   const getEvents = async () => {
+  //     const response = await axios.get("api/events");
+  //     const data: { events: IEventItems[] } = await response.data;
 
-      setEventsData(data);
-    };
+  //     setEventsData(data.events);
+  //   };
 
-    getEvents();
-  }, []);
+  //   getEvents();
+  // }, []);
 
   return (
     <div>
       <MetaHead title="Events" desc="List All Events you can visit" />
-      <EventList items={eventsData} />
+      <NewsletterRegistration />
+      <EventList items={events} />
     </div>
   );
 }
@@ -44,7 +45,6 @@ export const getStaticProps: GetStaticProps = async () => {
   // const filePath = path.join(process.cwd(), "events-db.json");
   // const eventsData = await fs.readFile(filePath);
   // const newData = JSON.parse(eventsData.toString());
-  // console.log(newData.events);
 
   /* 
     fetch data with axios
@@ -53,6 +53,10 @@ export const getStaticProps: GetStaticProps = async () => {
   // const data: IEventItems[] = await response.data;
 
   const featuredEvents = await getFeaturedEvents();
+
+  // const filePath = getFilePath();
+  // const getJSONData = getJsonData(filePath);
+  // const featuredEvents = getJSONData.events.filter((event) => event.isFeatured);
 
   if (!featuredEvents) {
     return {

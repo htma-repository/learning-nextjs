@@ -89,6 +89,24 @@
       "image": "images/coding-event.jpg",
       "isFeatured": true,
       "id": "7fiz3uV"
+    },
+    {
+      "title": "Forward Configuration Consultant",
+      "description": "Omnis omnis aut id voluptatum tempore.",
+      "location": "Sit maiores perferendis.",
+      "date": "2023-12-05",
+      "image": "images/coding-event.jpg",
+      "isFeatured": true,
+      "id": "1672585490707"
+    },
+    {
+      "title": "Dynamic Mobility Manager test",
+      "description": "Ipsam numquam repellat eum et veritatis.",
+      "location": "Corrupti minima temporibus est natus nesciunt quasi ut.",
+      "date": "2022-12-20",
+      "image": "images/coding-event.jpg",
+      "isFeatured": true,
+      "id": "1672585692313"
     }
   ]
 }

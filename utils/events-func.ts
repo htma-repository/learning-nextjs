@@ -1,14 +1,31 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
-import { IEventItems } from "./interface";
+import { IEventItems } from "./type";
 
-const API = axios.create({ baseURL: "http://localhost:3000/api/" });
+export const API = axios.create({ baseURL: "http://localhost:3000/api/" });
 
 export async function getAllEvents() {
-  const response = await API.get("events");
-  const data: IEventItems[] = await response.data.events;
+  const response: AxiosResponse<{ events: IEventItems[] }> = await API({
+    method: "GET",
+    url: "events",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = response.data;
+  return data.events;
+}
 
-  return data;
+export async function getEventById(id: string) {
+  const response: AxiosResponse<{ event: IEventItems }> = await API({
+    method: "GET",
+    url: `events/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = response.data;
+  return data.event;
 }
 
 export async function getFeaturedEvents() {
@@ -24,16 +41,5 @@ export async function getFilteredEvents(year: number, month: number) {
       eventDate.getFullYear() === year && eventDate.getMonth() === month - 1
     );
   });
-
   return filteredEvents;
-}
-
-export async function getEventById(id: string) {
-  // const response = await API.get(`events/${id}`);
-  // const data: IEventItems = await response.data;
-  const events = await getAllEvents();
-  const eventById = events.filter((event) => event.id === id);
-  console.log(eventById);
-
-  return eventById;
 }

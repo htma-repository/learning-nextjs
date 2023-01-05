@@ -1,7 +1,6 @@
 import EventItem from "./event-item";
 
-import { IEventItems } from "../../utils/interface";
-import MetaHead from "../ui/meta-head";
+import { IEventItems } from "../../utils/type";
 
 import classes from "./event-list.module.css";
 
@@ -15,8 +14,8 @@ const EventList = ({ items }: IProps) => {
       <ul className={classes.list}>
         {items.map((item) => (
           <EventItem
-            key={item.id}
-            id={item.id}
+            key={item._id}
+            _id={item._id}
             title={item.title}
             location={item.location}
             date={item.date}

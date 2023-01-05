@@ -4,19 +4,19 @@ import Button from "../ui/button";
 import DateIcon from "../icons/date-icon";
 import AddressIcon from "../icons/address-icon";
 import ArrowRightIcon from "../icons/arrow-right-icon";
-import { IEventItems } from "../../utils/interface";
+import { IEventItems } from "../../utils/type";
 import classes from "./event-item.module.css";
 
 type IProps = IEventItems;
 
-const EventItem = ({ title, image, date, location, id }: IProps) => {
+const EventItem = ({ title, image, date, location, _id }: IProps) => {
   const humanReadableDate = new Date(date).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
   const formattedAddress = location.replace(", ", "\n");
-  const exploreLink = `/events/${id}`;
+  const exploreLink = `/events/${_id}`;
 
   return (
     <li className={classes.item}>

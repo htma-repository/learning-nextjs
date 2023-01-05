@@ -1,8 +1,7 @@
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import axios from "axios";
 
-import { IEventItems } from "../../utils/interface";
+import { IEventItems } from "../../utils/type";
 import { getAllEvents } from "../../utils/events-func";
 import EventList from "../../components/events/event-list";
 import EventsSearch from "../../components/events/events-search";

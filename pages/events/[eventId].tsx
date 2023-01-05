@@ -1,28 +1,39 @@
+import { useEffect, useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
+import { useRouter } from "next/router";
+import axios from "axios";
 
-// import { useRouter } from "next/router";
-
-// import { getEventById } from "../../utils/events-func";
-import { IEventItems } from "../../utils/interface";
+import { IEventItems } from "../../utils/type";
 import { getAllEvents, getEventById } from "../../utils/events-func";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 import ErrorAlert from "../../components/ui/error-alert";
 import MetaHead from "../../components/ui/meta-head";
+import Comments from "../../components/input/comments";
 
 interface IProps {
   event: IEventItems;
 }
 
 const EventDetailPage = ({ event }: IProps) => {
-  console.log(event);
-  // const { query } = useRouter();
+  const [clientEvent, setClientEvent] = useState<IEventItems>(event);
+  const { query } = useRouter();
 
-  // const eventId = query.eventId as string;
-  // const event = getEventById(events, eventId) as IEventItems;
+  const eventId = query.eventId as string;
 
-  if (!event.id) {
+  useEffect(() => {
+    const getEventById = async () => {
+      const response = await axios.get(`/api/events/${eventId}`);
+      const data: { event: IEventItems } = await response.data;
+
+      setClientEvent(data.event);
+    };
+
+    getEventById();
+  }, [eventId]);
+
+  if (!clientEvent._id) {
     return (
       <ErrorAlert>
         <p>No event found!</p>
@@ -32,17 +43,18 @@ const EventDetailPage = ({ event }: IProps) => {
 
   return (
     <>
-      <MetaHead title={event.title} desc={event.description} />
-      <EventSummary title={event.title} />
+      <MetaHead title={clientEvent.title} desc={clientEvent.description} />
+      <EventSummary title={clientEvent.title} />
       <EventLogistics
-        date={event.date}
-        address={event.location}
-        image={event.image}
-        imageAlt={event.title}
+        date={clientEvent.date}
+        address={clientEvent.location}
+        image={clientEvent.image}
+        imageAlt={clientEvent.title}
       />
       <EventContent>
-        <p>{event.description}</p>
+        <p>{clientEvent.description}</p>
       </EventContent>
+      <Comments eventId={clientEvent._id} />
     </>
   );
 };
@@ -53,7 +65,7 @@ const EventDetailPage = ({ event }: IProps) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const events = await getAllEvents();
 
-  const id = events.map((event) => event.id);
+  const id = events.map((event) => event._id);
 
   const params = id.map((id) => ({
     params: { eventId: id },
@@ -76,9 +88,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const eventId = params?.eventId as string;
 
-  const eventById = (await getEventById(eventId)).find(
-    (event) => event.id === eventId
-  ) as IEventItems;
+  const eventById = await getEventById(eventId);
 
   return {
     props: {
