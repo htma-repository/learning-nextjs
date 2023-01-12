@@ -11,6 +11,7 @@ function Hero() {
           alt="An image showing Max"
           width={600}
           height={600}
+          priority
         />
       </div>
       <h1>Hi, I&apos;m Hutama</h1>

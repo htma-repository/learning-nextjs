@@ -1,7 +1,6 @@
 import { MongoClient, Document, Sort } from "mongodb";
 
-export const URL =
-  "mongodb+srv://admin:hSqQv48tg1m9X8pM@events-db.ehfolsq.mongodb.net/?retryWrites=true&w=majority";
+export const URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}.ehfolsq.mongodb.net/?retryWrites=true&w=majority`;
 
 export async function databaseConnect() {
   const client = await MongoClient.connect(URL);
@@ -13,7 +12,7 @@ export async function insertDocument(
   document: Document,
   collectionName: string
 ) {
-  const db = client.db("Events");
+  const db = client.db(process.env.DB_NAME);
   return await db.collection(collectionName).insertOne(document);
 }
 

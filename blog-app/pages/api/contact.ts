@@ -1,4 +1,3 @@
-// import { NextRequest, NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient } from "mongodb";
 
@@ -7,6 +6,8 @@ import { IContact } from "../../types/types";
 interface INextRequest extends NextApiRequest {
   body: IContact;
 }
+
+const connectMongoDb = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}.ehfolsq.mongodb.net/?retryWrites=true&w=majority`;
 
 async function handler(req: INextRequest, res: NextApiResponse) {
   if (req.method === "POST") {
@@ -33,19 +34,16 @@ async function handler(req: INextRequest, res: NextApiResponse) {
     let client;
 
     try {
-      client = await MongoClient.connect(
-        "mongodb+srv://maximilian:2YkcXq43KyPk0vqp@cluster0.ntrwp.mongodb.net/my-site?retryWrites=true&w=majority"
-      );
+      client = await MongoClient.connect(connectMongoDb);
     } catch (error) {
       res.status(500).json({ message: "Could not connect to database." });
       return;
     }
 
-    const db = client.db();
+    const db = client.db(process.env.DB_NAME);
 
     try {
       await db.collection("messages").insertOne(newMessage);
-      // newMessage.id = result.insertedId;
     } catch (error) {
       client.close();
       res.status(500).json({ message: "Storing message failed!" });

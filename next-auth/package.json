@@ -1,5 +1,5 @@
 {
-  "name": "blog-app",
+  "name": "next-auth",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,17 +15,9 @@
     "@types/react-dom": "18.0.10",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
-    "gray-matter": "^4.0.3",
-    "mongodb": "^4.13.0",
     "next": "13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-markdown": "^8.0.4",
-    "react-syntax-highlighter": "^15.5.0",
-    "sharp": "^0.31.3",
     "typescript": "4.9.4"
-  },
-  "devDependencies": {
-    "@types/react-syntax-highlighter": "^15.5.6"
   }
 }
