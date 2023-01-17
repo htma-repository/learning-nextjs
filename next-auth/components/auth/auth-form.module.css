@@ -70,3 +70,17 @@
   background-color: transparent;
   color: #ae82cc;
 }
+
+.actions p {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
+}
